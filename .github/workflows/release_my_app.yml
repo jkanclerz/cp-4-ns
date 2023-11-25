@@ -1,0 +1,41 @@
+name: release my app
+on: 
+  - push
+jobs:
+  StaticCodeAnalysis:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "I going to analyze your code base"
+  RunUnitTests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ls -la 
+      - name: Set up JDK 11 for x64
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          architecture: x64
+      - name: Compile my code
+        run: mvn compile
+      - name: Test my code
+        run: mvn test
+      - run: echo "it works :), you are ready to deploy"
+  ReleaseMyApp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ls -la 
+      - name: Set up JDK 11 for x64
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          architecture: x64
+      - name: Create JAR package
+        run: mvn package
+      - name: list compiled files
+        run: ls -la target/
+      
+    
