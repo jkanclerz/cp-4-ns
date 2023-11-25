@@ -1,6 +1,8 @@
 name: release my app
 on: 
-  - push
+  push:
+    tags:
+      - v*
 jobs:
   StaticCodeAnalysis:
     runs-on: ubuntu-latest
@@ -24,6 +26,8 @@ jobs:
       - run: echo "it works :), you are ready to deploy"
   ReleaseMyApp:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - run: ls -la 
@@ -37,5 +41,10 @@ jobs:
         run: mvn package
       - name: list compiled files
         run: ls -la target/
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "target/my-ecommerce-0.1.jar"
+          name: "My pre release for ecommerce app"
+          body: "Whoooo!! 👻"
       
     
